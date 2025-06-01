@@ -8,3 +8,53 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* General Styles */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+}
+
+/* Navbar Styles */
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+  font-weight: 600;
+}
+
+/* Card Styles */
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Button Styles */
+.btn {
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+}
+
+/* Utility Classes */
+.shadow-sm {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+/* Form Styles */
+.form-control {
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  border-color: #86b7fe;
+}

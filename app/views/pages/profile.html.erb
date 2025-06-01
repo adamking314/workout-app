@@ -1,0 +1,164 @@
+<div class="container mt-4">
+  <!-- Create Workout Button -->
+  <button class="btn btn-primary mb-4" onclick="toggleWorkoutForm()">Create Workout</button>
+
+  <!-- Workout Creation Form (Hidden by default) -->
+  <div id="workoutForm" class="card mb-4" style="display: none;">
+    <div class="card-body">
+      <h3>Create New Workout</h3>
+      <form>
+        <div class="form-group mb-3">
+          <label for="workoutName">Workout Name</label>
+          <input type="text" class="form-control" id="workoutName" required>
+        </div>
+        
+        <div class="form-group mb-3">
+          <label for="workoutDescription">Description</label>
+          <textarea class="form-control" id="workoutDescription" rows="3"></textarea>
+        </div>
+
+        <div id="blocksContainer">
+          <!-- Single Block -->
+          <div class="block card mb-3">
+            <div class="card-body">
+              <h5>Block 1</h5>
+              <div class="exercises">
+                <!-- Single Exercise -->
+                <div class="exercise-entry border p-3 mb-2">
+                  <div class="row">
+                    <div class="col">
+                      <input type="text" class="form-control" placeholder="Exercise Name" required>
+                    </div>
+                    <div class="col">
+                      <input type="number" class="form-control" placeholder="Sets" required>
+                    </div>
+                    <div class="col">
+                      <input type="number" class="form-control" placeholder="Reps" required>
+                    </div>
+                    <div class="col">
+                      <input type="number" class="form-control" placeholder="Weight" required>
+                    </div>
+                    <div class="col-auto">
+                      <button type="button" class="btn btn-danger" onclick="removeExercise(this)">Remove</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary mt-2" onclick="addExercise(this)">Add Exercise</button>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-info mb-3" onclick="addBlock()">Add Block</button>
+        <button type="submit" class="btn btn-success">Save Workout</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Saved Workouts Section -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>Saved Workouts</h3>
+    </div>
+    <div class="card-body">
+      <!-- Add your saved workouts here -->
+      <div class="list-group">
+        <!-- Example saved workout -->
+        <div class="list-group-item">
+          <h5>Upper Body Workout</h5>
+          <p>Focus on chest and shoulders</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Created Workouts Section -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Your Created Workouts</h3>
+    </div>
+    <div class="card-body">
+      <!-- Add your created workouts here -->
+      <div class="list-group">
+        <!-- Example created workout -->
+        <div class="list-group-item">
+          <h5>Leg Day</h5>
+          <p>Complete lower body workout</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleWorkoutForm() {
+    const form = document.getElementById('workoutForm');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function addExercise(button) {
+    const exercisesDiv = button.parentElement.querySelector('.exercises');
+    const newExercise = document.createElement('div');
+    newExercise.className = 'exercise-entry border p-3 mb-2';
+    newExercise.innerHTML = `
+      <div class="row">
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Exercise Name" required>
+        </div>
+        <div class="col">
+          <input type="number" class="form-control" placeholder="Sets" required>
+        </div>
+        <div class="col">
+          <input type="number" class="form-control" placeholder="Reps" required>
+        </div>
+        <div class="col">
+          <input type="number" class="form-control" placeholder="Weight" required>
+        </div>
+        <div class="col-auto">
+          <button type="button" class="btn btn-danger" onclick="removeExercise(this)">Remove</button>
+        </div>
+      </div>
+    `;
+    exercisesDiv.appendChild(newExercise);
+  }
+
+  function removeExercise(button) {
+    button.closest('.exercise-entry').remove();
+  }
+
+  function addBlock() {
+    const blocksContainer = document.getElementById('blocksContainer');
+    const blockCount = blocksContainer.children.length + 1;
+    
+    const newBlock = document.createElement('div');
+    newBlock.className = 'block card mb-3';
+    newBlock.innerHTML = `
+      <div class="card-body">
+        <h5>Block ${blockCount}</h5>
+        <div class="exercises">
+          <div class="exercise-entry border p-3 mb-2">
+            <div class="row">
+              <div class="col">
+                <input type="text" class="form-control" placeholder="Exercise Name" required>
+              </div>
+              <div class="col">
+                <input type="number" class="form-control" placeholder="Sets" required>
+              </div>
+              <div class="col">
+                <input type="number" class="form-control" placeholder="Reps" required>
+              </div>
+              <div class="col">
+                <input type="number" class="form-control" placeholder="Weight" required>
+              </div>
+              <div class="col-auto">
+                <button type="button" class="btn btn-danger" onclick="removeExercise(this)">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary mt-2" onclick="addExercise(this)">Add Exercise</button>
+      </div>
+    `;
+    blocksContainer.appendChild(newBlock);
+  }
+</script>
