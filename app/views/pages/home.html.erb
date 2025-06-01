@@ -14,7 +14,8 @@
             <p class="card-text">A comprehensive upper body workout focusing on strength and muscle building.</p>
             <div class="d-flex justify-content-between align-items-center">
               <small class="text-muted">4 blocks · 12 exercises</small>
-              <button class="btn btn-outline-primary">View Workout</button>
+              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workoutModal" 
+                      onclick="showWorkoutDetails('Upper Body Strength')">View Workout</button>
             </div>
           </div>
         </div>
@@ -27,7 +28,8 @@
             <p class="card-text">Build leg strength and explosiveness with this focused lower body routine.</p>
             <div class="d-flex justify-content-between align-items-center">
               <small class="text-muted">3 blocks · 9 exercises</small>
-              <button class="btn btn-outline-primary">View Workout</button>
+              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workoutModal"
+                      onclick="showWorkoutDetails('Lower Body Power')">View Workout</button>
             </div>
           </div>
         </div>
@@ -40,11 +42,118 @@
             <p class="card-text">High-intensity interval training targeting all major muscle groups.</p>
             <div class="d-flex justify-content-between align-items-center">
               <small class="text-muted">5 blocks · 15 exercises</small>
-              <button class="btn btn-outline-primary">View Workout</button>
+              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workoutModal"
+                      onclick="showWorkoutDetails('Full Body HIIT')">View Workout</button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Workout Details Modal -->
+  <div class="modal fade" id="workoutModal" tabindex="-1" aria-labelledby="workoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="workoutModalLabel">Workout Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="workoutDetails">
+          <!-- Workout details will be inserted here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save to My Workouts</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+  function showWorkoutDetails(workoutName) {
+    const workoutData = {
+      'Upper Body Strength': {
+        blocks: [
+          {
+            name: 'Chest & Shoulders',
+            exercises: [
+              { name: 'Bench Press', sets: 4, reps: 10, weight: '135 lbs' },
+              { name: 'Shoulder Press', sets: 3, reps: 12, weight: '95 lbs' }
+            ]
+          },
+          {
+            name: 'Back & Arms',
+            exercises: [
+              { name: 'Pull-ups', sets: 3, reps: 8, weight: 'Body weight' },
+              { name: 'Bicep Curls', sets: 3, reps: 12, weight: '30 lbs' }
+            ]
+          }
+        ]
+      },
+      'Lower Body Power': {
+        blocks: [
+          {
+            name: 'Quads & Glutes',
+            exercises: [
+              { name: 'Squats', sets: 4, reps: 8, weight: '185 lbs' },
+              { name: 'Lunges', sets: 3, reps: 12, weight: '95 lbs' }
+            ]
+          }
+        ]
+      },
+      'Full Body HIIT': {
+        blocks: [
+          {
+            name: 'Circuit 1',
+            exercises: [
+              { name: 'Burpees', sets: 3, reps: 15, weight: 'Body weight' },
+              { name: 'Mountain Climbers', sets: 3, reps: 20, weight: 'Body weight' }
+            ]
+          }
+        ]
+      }
+    };
+
+    const workout = workoutData[workoutName];
+    const modalTitle = document.getElementById('workoutModalLabel');
+    const modalBody = document.getElementById('workoutDetails');
+    
+    modalTitle.textContent = workoutName;
+    
+    let html = '<div class="workout-blocks">';
+    workout.blocks.forEach((block, blockIndex) => {
+      html += `
+        <div class="block mb-4">
+          <h4 class="mb-3">Block ${blockIndex + 1}: ${block.name}</h4>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Exercise</th>
+                  <th>Sets</th>
+                  <th>Reps</th>
+                  <th>Weight</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${block.exercises.map(exercise => `
+                  <tr>
+                    <td>${exercise.name}</td>
+                    <td>${exercise.sets}</td>
+                    <td>${exercise.reps}</td>
+                    <td>${exercise.weight}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    });
+    html += '</div>';
+    
+    modalBody.innerHTML = html;
+  }
+</script>

@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  username: MyString
+  workout_name: MyString
+  description: MyText
+  block_name: MyString
+  exercise: MyString
+  sets: 1
+  reps: 1
+  weight: 9.99
+  percent_of_max: 9.99
+
+two:
+  username: MyString
+  workout_name: MyString
+  description: MyText
+  block_name: MyString
+  exercise: MyString
+  sets: 1
+  reps: 1
+  weight: 9.99
+  percent_of_max: 9.99

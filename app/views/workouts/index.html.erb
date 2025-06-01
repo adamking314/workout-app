@@ -1,0 +1,30 @@
+<h1>All Workouts</h1>
+
+<% if @workouts.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Workout Name</th>
+        <th>Username</th>
+        <th>Block</th>
+        <th>Exercise</th>
+        <th>Created At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @workouts.each do |w| %>
+        <tr>
+          <td>
+            <%= link_to w.workout_name, workout_path(w) %>
+          </td>
+          <td><%= w.username %></td>
+          <td><%= w.block_name %></td>
+          <td><%= w.exercise %></td>
+          <td><%= w.created_at.strftime("%Y-%m-%d") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No workouts have been logged yet.</p>
+<% end %>

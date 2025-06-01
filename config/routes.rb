@@ -1,27 +1,33 @@
 Rails.application.routes.draw do
-  get "profiles/show"
-  get "pages/home"
-  get "pages/profile"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  get "workouts/index"
+  get "workouts/show"
+  # === API namespace ===
+  namespace :api do
+    # Users: signup (create) and show
+    resources :users, only: [:create, :show]
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+    # Sessions: login (create) and logout (destroy)
+    post   "/sessions",      to: "sessions#create"
+    delete "/sessions/:id",  to: "sessions#destroy", as: :logout
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  root "pages#home"
-  
-  # Defines the root path route ("/")
-  # root "posts#index"
-  Rails.application.routes.draw do
-  # … any existing routes …
+    # Workouts: full CRUD (index, show, create, update, destroy)
+    resources :workouts, only: [:index, :show, :create, :update, :destroy]
+  end
 
-  # Add this line to route GET "/profile" to ProfilesController#show:
+  # === Static / server-rendered pages ===
+  # If you have a ProfilesController#show:
+  get "/profiles/show", to: "profiles#show"
+
+  # If you have a PagesController with home + profile actions:
+  get "/pages/home",    to: "pages#home"
+  get "/pages/profile", to: "pages#profile"
+
+  # Map "/profile" directly to PagesController#profile (shortcut)
   get "/profile", to: "pages#profile"
 
-  # (You can keep other routes below or above as needed.)
-end
+  # Health-check endpoint (optional)
+  get "/up" => "rails/health#show", as: :rails_health_check
 
+  # Root path
+  root "pages#home"
 end

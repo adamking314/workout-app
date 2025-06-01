@@ -1,0 +1,14 @@
+<h1><%= @workout.workout_name %></h1>
+
+<ul>
+  <li><strong>Username:</strong> <%= @workout.username %></li>
+  <li><strong>Block:</strong> <%= @workout.block_name %></li>
+  <li><strong>Exercise:</strong> <%= @workout.exercise %></li>
+  <li><strong>Sets:</strong> <%= @workout.sets %></li>
+  <li><strong>Reps:</strong> <%= @workout.reps %></li>
+  <li><strong>Weight:</strong> <%= @workout.weight %></li>
+  <li><strong>% of Max:</strong> <%= @workout.percent_of_max %></li>
+  <li><strong>Description:</strong> <%= @workout.description %></li>
+</ul>
+
+<%= link_to "Back to All Workouts", workouts_path %>
