@@ -61,12 +61,16 @@
       <h3>Saved Workouts</h3>
     </div>
     <div class="card-body">
-      <!-- Add your saved workouts here -->
       <div class="list-group">
-        <!-- Example saved workout -->
         <div class="list-group-item">
-          <h5>Upper Body Workout</h5>
-          <p>Focus on chest and shoulders</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h5>Upper Body Workout</h5>
+              <p class="mb-0">Focus on chest and shoulders</p>
+            </div>
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workoutModal" 
+                    onclick="showWorkoutDetails('Upper Body Strength')">View Workout</button>
+          </div>
         </div>
       </div>
     </div>
@@ -78,12 +82,34 @@
       <h3>Your Created Workouts</h3>
     </div>
     <div class="card-body">
-      <!-- Add your created workouts here -->
       <div class="list-group">
-        <!-- Example created workout -->
         <div class="list-group-item">
-          <h5>Leg Day</h5>
-          <p>Complete lower body workout</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h5>Leg Day</h5>
+              <p class="mb-0">Complete lower body workout</p>
+            </div>
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workoutModal"
+                    onclick="showWorkoutDetails('Lower Body Power')">View Workout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout Details Modal -->
+  <div class="modal fade" id="workoutModal" tabindex="-1" aria-labelledby="workoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="workoutModalLabel">Workout Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="workoutDetails">
+          <!-- Workout details will be inserted here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -160,5 +186,79 @@
       </div>
     `;
     blocksContainer.appendChild(newBlock);
+  }
+
+  function showWorkoutDetails(workoutName) {
+    const workoutData = {
+      'Upper Body Strength': {
+        blocks: [
+          {
+            name: 'Chest & Shoulders',
+            exercises: [
+              { name: 'Bench Press', sets: 4, reps: 10, weight: '135 lbs' },
+              { name: 'Shoulder Press', sets: 3, reps: 12, weight: '95 lbs' }
+            ]
+          },
+          {
+            name: 'Back & Arms',
+            exercises: [
+              { name: 'Pull-ups', sets: 3, reps: 8, weight: 'Body weight' },
+              { name: 'Bicep Curls', sets: 3, reps: 12, weight: '30 lbs' }
+            ]
+          }
+        ]
+      },
+      'Lower Body Power': {
+        blocks: [
+          {
+            name: 'Quads & Glutes',
+            exercises: [
+              { name: 'Squats', sets: 4, reps: 8, weight: '185 lbs' },
+              { name: 'Lunges', sets: 3, reps: 12, weight: '95 lbs' }
+            ]
+          }
+        ]
+      }
+    };
+
+    const workout = workoutData[workoutName];
+    const modalTitle = document.getElementById('workoutModalLabel');
+    const modalBody = document.getElementById('workoutDetails');
+    
+    modalTitle.textContent = workoutName;
+    
+    let html = '<div class="workout-blocks">';
+    workout.blocks.forEach((block, blockIndex) => {
+      html += `
+        <div class="block mb-4">
+          <h4 class="mb-3">Block ${blockIndex + 1}: ${block.name}</h4>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Exercise</th>
+                  <th>Sets</th>
+                  <th>Reps</th>
+                  <th>Weight</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${block.exercises.map(exercise => `
+                  <tr>
+                    <td>${exercise.name}</td>
+                    <td>${exercise.sets}</td>
+                    <td>${exercise.reps}</td>
+                    <td>${exercise.weight}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    });
+    html += '</div>';
+    
+    modalBody.innerHTML = html;
   }
 </script>
