@@ -77,7 +77,6 @@
 
 <script>
   document.addEventListener('turbo:load', () => {
-    // only run this script on pages with #workoutModal
     const modalEl = document.getElementById('workoutModal');
     if (!modalEl) return;
 
@@ -104,6 +103,7 @@
     // show details in modal
     function showWorkoutDetails(raw) {
       let workout;
+      raw = raw.replace(/\+/g, ' ');
       try {
         workout = JSON.parse(decodeURIComponent(raw));
       } catch (err) {
