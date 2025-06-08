@@ -225,22 +225,19 @@
       </div>
     </div>
 
-    <!--    Saved Workouts (initially empty; we’ll fill in via JS) -->
+    <!--    Saved Workouts  -->
     <div class="card mb-4">
       <div class="card-header">
         <h3>Saved Workouts</h3>
       </div>
       <div class="card-body">
         <div id="savedWorkoutsGrid" class="row g-4">
-          <!--
-            We remove the ERB loop here and instead populate via JS.
-            If there are no saved workouts, we’ll insert a “No saved workouts” message in JS.
-          -->
+          
         </div>
       </div>
     </div>
 
-    <!-- Your Created Workouts (also populated via JS) -->
+    <!-- Your Created Workouts -->
     <div class="card mb-4">
       <div class="card-header">
         <h3>Your Created Workouts</h3>
@@ -255,7 +252,7 @@
       </div>
     </div>
 
-    <!-- Workout Details Modal (unchanged) -->
+    <!-- Workout Details Modal -->
     <div
       class="modal fade"
       id="workoutModal"
@@ -526,7 +523,6 @@
         });
     }
 
-    // ——— BIND EACH FORM EXACTLY ONCE ———
     bindOnce(document.getElementById('loginForm'),      'submit', handleLogin);
     bindOnce(document.getElementById('signupForm'),     'submit', handleSignup);
     bindOnce(document.getElementById('newWorkoutForm'), 'submit', handleNewWorkout);
@@ -789,7 +785,7 @@
         });
     }
 
-    // ——————— HELPER FUNCTIONS (UNCHANGED) ———————
+    // ——————— HELPER FUNCTIONS ———————
     window.toggleWorkoutForm = function () {
       const form = document.getElementById('workoutForm');
       form.style.display = form.style.display === 'none' ? 'block' : 'none';

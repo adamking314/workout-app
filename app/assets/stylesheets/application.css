@@ -13,30 +13,114 @@
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
+  background-color: #f8f9fa;
+  color: #212529;
 }
 
 /* Navbar Styles */
 .navbar {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
 }
 
 .navbar-brand {
   font-weight: 600;
+  font-size: 1.25rem;
 }
 
 /* Card Styles */
 .card {
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  margin-bottom: 1.5rem;
+  border: none;
+  background-color: white;
 }
 
 .card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #2c3e50;
+}
+
+/* Container Spacing */
+.container {
+  padding: 1rem 15px;
+  max-width: 1140px;
 }
 
 /* Button Styles */
 .btn {
   border-radius: 6px;
   padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+  transform: translateY(-1px);
+}
+
+/* Modal Styles */
+.modal-content {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  border-bottom: 1px solid #eee;
+  padding: 1rem 1.5rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  border-top: 1px solid #eee;
+  padding: 1rem 1.5rem;
+}
+
+/* Table Styles */
+.table {
+  margin-bottom: 0;
+}
+
+.table th {
+  font-weight: 600;
+  color: #495057;
+  background-color: #f8f9fa;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+/* Grid Adjustments */
+.row {
+  margin: -0.5rem -15px;
+}
+
+.col-md-4 {
+  padding: 0.5rem 15px;
 }
 
 /* Utility Classes */
@@ -45,16 +129,77 @@ body {
 }
 
 .min-vh-100 {
-  min-height: 100vh;
+  min-height: calc(100vh - 56px); /* Subtract navbar height */
+  padding: 2rem 0;
 }
 
 /* Form Styles */
 .form-control {
   border-radius: 6px;
   border: 1px solid #dee2e6;
+  padding: 0.5rem 0.75rem;
 }
 
 .form-control:focus {
-  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
   border-color: #86b7fe;
+}
+
+/* Text Styles */
+.text-muted {
+  color: #6c757d !important;
+  font-size: 0.875rem;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+  .row {
+    display: flex;
+    flex-direction: column;
+    margin: 0 -10px;
+  }
+
+  .col-md-4 {
+    padding: 0.5rem 10px;
+  }
+
+  .container {
+    padding: 0.5rem 10px;
+  }
+
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+}
+
+/* Add some subtle animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.card {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Add custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
