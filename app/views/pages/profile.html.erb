@@ -1,115 +1,288 @@
 <div class="container mt-4">
-  <!-- Create Workout Button -->
-  <button class="btn btn-primary mb-4" onclick="toggleWorkoutForm()">Create Workout</button>
-
-  <!-- Workout Creation Form (Hidden by default) -->
-  <div id="workoutForm" class="card mb-4" style="display: none;">
-    <div class="card-body">
-      <h3>Create New Workout</h3>
-      <form>
-        <div class="form-group mb-3">
-          <label for="workoutName">Workout Name</label>
-          <input type="text" class="form-control" id="workoutName" required>
+  <div id="authSection" class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header text-center">
+          <h3>Welcome</h3>
+          <p class="text-muted">Please log in or sign up to continue</p>
         </div>
-        
-        <div class="form-group mb-3">
-          <label for="workoutDescription">Description</label>
-          <textarea class="form-control" id="workoutDescription" rows="3"></textarea>
-        </div>
+        <div class="card-body">
+          <!-- Toggle between Login and Sign Up -->
+          <ul class="nav nav-tabs mb-3" id="authTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="login-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#loginPane"
+                type="button"
+                role="tab">
+                Log In
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="signup-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#signupPane"
+                type="button"
+                role="tab">
+                Sign Up
+              </button>
+            </li>
+          </ul>
 
-        <div id="blocksContainer">
-          <!-- Single Block -->
-          <div class="block card mb-3">
-            <div class="card-body">
-              <h5>Block 1</h5>
-              <div class="exercises">
-                <!-- Single Exercise -->
-                <div class="exercise-entry border p-3 mb-2">
-                  <div class="row">
-                    <div class="col">
-                      <input type="text" class="form-control" placeholder="Exercise Name" required>
-                    </div>
-                    <div class="col">
-                      <input type="number" class="form-control" placeholder="Sets" required>
-                    </div>
-                    <div class="col">
-                      <input type="number" class="form-control" placeholder="Reps" required>
-                    </div>
-                    <div class="col">
-                      <input type="number" class="form-control" placeholder="Weight" required>
-                    </div>
-                    <div class="col-auto">
-                      <button type="button" class="btn btn-danger" onclick="removeExercise(this)">Remove</button>
+          <div class="tab-content">
+            <!-- LOGIN FORM -->
+            <div class="tab-pane fade show active" id="loginPane" role="tabpanel">
+              <div id="loginErrors" class="text-danger mb-3" style="display: none;"></div>
+
+              <form id="loginForm">
+                <div class="mb-3">
+                  <label for="loginUsername" class="form-label">Username</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="loginUsername"
+                    placeholder="Enter your username"
+                    required>
+                </div>
+                <div class="mb-3">
+                  <label for="loginPassword" class="form-label">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="loginPassword"
+                    placeholder="••••••••"
+                    required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Log In</button>
+              </form>
+            </div>
+
+            <!-- SIGN UP FORM -->
+            <div class="tab-pane fade" id="signupPane" role="tabpanel">
+              <div id="signupErrors" class="text-danger mb-3" style="display: none;"></div>
+              <form id="signupForm">
+                <div class="mb-3">
+                  <label for="signupUsername" class="form-label">Username</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="signupUsername"
+                    placeholder="Choose a username"
+                    required>
+                </div>
+                <div class="mb-3">
+                  <label for="signupEmail" class="form-label">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="signupEmail"
+                    placeholder="you@example.com"
+                    required>
+                </div>
+                <div class="mb-3">
+                  <label for="signupPassword" class="form-label">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="signupPassword"
+                    placeholder="••••••••"
+                    required>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Sign Up</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="profileSection" style="display: none;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 id="profileGreeting">
+        Hello, <span id="profileUsername"></span>!
+      </h4>
+      <button class="btn btn-outline-danger" id="logoutButton">
+        Log Out
+      </button>
+    </div>
+
+    <button class="btn btn-primary mb-4" onclick="toggleWorkoutForm()">
+      Create Workout
+    </button>
+
+    <div id="workoutForm" class="card mb-4" style="display: none;">
+      <div class="card-body">
+        <h3>Create New Workout</h3>
+        <form id="newWorkoutForm">
+          <div class="form-group mb-3">
+            <label for="workoutName">Workout Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="workoutName"
+              placeholder="e.g. Leg Day"
+              required>
+          </div>
+          <div class="form-group mb-3">
+            <label for="workoutDescription">Description</label>
+            <textarea
+              class="form-control"
+              id="workoutDescription"
+              rows="3"
+              placeholder="Brief description"
+            ></textarea>
+          </div>
+
+          <div id="blocksContainer">
+            <div class="block card mb-3">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5>Block 1</h5>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    onclick="removeBlock(this)">
+                    Remove Block
+                  </button>
+                </div>
+
+                <div class="mb-2">
+                  <label>Block Name</label>
+                  <input
+                    type="text"
+                    class="form-control block-name-input"
+                    placeholder="e.g. Quads & Glutes"
+                    required>
+                </div>
+
+                <div class="exercises">
+                  <!-- Single Exercise Row -->
+                  <div class="exercise-entry border p-3 mb-2">
+                    <div class="row g-2">
+                      <div class="col">
+                        <input
+                          type="text"
+                          class="form-control exercise-name"
+                          placeholder="Exercise Name"
+                          required>
+                      </div>
+                      <div class="col">
+                        <input
+                          type="number"
+                          class="form-control exercise-sets"
+                          placeholder="Sets"
+                          required>
+                      </div>
+                      <div class="col">
+                        <input
+                          type="number"
+                          class="form-control exercise-reps"
+                          placeholder="Reps"
+                          required>
+                      </div>
+                      <div class="col">
+                        <input
+                          type="number"
+                          class="form-control exercise-weight"
+                          placeholder="Weight"
+                          required>
+                      </div>
+                      <div class="col-auto">
+                        <button
+                          type="button"
+                          class="btn btn-danger"
+                          onclick="removeExercise(this)">
+                          Remove
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm mt-2"
+                  onclick="addExercise(this)">
+                  Add Exercise
+                </button>
               </div>
-              <button type="button" class="btn btn-secondary mt-2" onclick="addExercise(this)">Add Exercise</button>
             </div>
           </div>
-        </div>
 
-        <button type="button" class="btn btn-info mb-3" onclick="addBlock()">Add Block</button>
-        <button type="submit" class="btn btn-success">Save Workout</button>
-      </form>
+          <button
+            type="button"
+            class="btn btn-info mb-3"
+            onclick="addBlock()">
+            Add Block
+          </button>
+          <button type="submit" class="btn btn-success">Save Workout</button>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <!-- Saved Workouts Section -->
-  <div class="card mb-4">
-    <div class="card-header">
-      <h3>Saved Workouts</h3>
-    </div>
-    <div class="card-body">
-      <div class="list-group">
-        <div class="list-group-item">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <h5>Upper Body Workout</h5>
-              <p class="mb-0">Focus on chest and shoulders</p>
-            </div>
-            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workoutModal" 
-                    onclick="showWorkoutDetails('Upper Body Strength')">View Workout</button>
-          </div>
+    <!--    Saved Workouts (initially empty; we’ll fill in via JS) -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h3>Saved Workouts</h3>
+      </div>
+      <div class="card-body">
+        <div id="savedWorkoutsGrid" class="row g-4">
+          <!--
+            We remove the ERB loop here and instead populate via JS.
+            If there are no saved workouts, we’ll insert a “No saved workouts” message in JS.
+          -->
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Created Workouts Section -->
-  <div class="card">
-    <div class="card-header">
-      <h3>Your Created Workouts</h3>
-    </div>
-    <div class="card-body">
-      <div class="list-group">
-        <div class="list-group-item">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <h5>Leg Day</h5>
-              <p class="mb-0">Complete lower body workout</p>
-            </div>
-            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workoutModal"
-                    onclick="showWorkoutDetails('Lower Body Power')">View Workout</button>
-          </div>
+    <!-- Your Created Workouts (also populated via JS) -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h3>Your Created Workouts</h3>
+      </div>
+      <div class="card-body">
+        <div id="createdWorkoutsGrid" class="row g-4">
+          <!-- populated by JS -->
+        </div>
+        <div id="noCreatedPlaceholder" class="text-muted" style="display: none;">
+          You haven’t created any workouts yet.
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Workout Details Modal -->
-  <div class="modal fade" id="workoutModal" tabindex="-1" aria-labelledby="workoutModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="workoutModalLabel">Workout Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="workoutDetails">
-          <!-- Workout details will be inserted here -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <!-- Workout Details Modal (unchanged) -->
+    <div
+      class="modal fade"
+      id="workoutModal"
+      tabindex="-1"
+      aria-labelledby="workoutModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="workoutModalLabel">
+              Workout Details
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal">
+            </button>
+          </div>
+          <div class="modal-body" id="workoutDetails"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -117,148 +290,693 @@
 </div>
 
 <script>
-  function toggleWorkoutForm() {
-    const form = document.getElementById('workoutForm');
-    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+ function bindOnce(el, event, handler) {
+    if (!el || el.dataset[`bound${event}`]) return;
+    el.addEventListener(event, handler);
+    el.dataset[`bound${event}`] = 'true';
   }
 
-  function addExercise(button) {
-    const exercisesDiv = button.parentElement.querySelector('.exercises');
-    const newExercise = document.createElement('div');
-    newExercise.className = 'exercise-entry border p-3 mb-2';
-    newExercise.innerHTML = `
-      <div class="row">
-        <div class="col">
-          <input type="text" class="form-control" placeholder="Exercise Name" required>
-        </div>
-        <div class="col">
-          <input type="number" class="form-control" placeholder="Sets" required>
-        </div>
-        <div class="col">
-          <input type="number" class="form-control" placeholder="Reps" required>
-        </div>
-        <div class="col">
-          <input type="number" class="form-control" placeholder="Weight" required>
-        </div>
-        <div class="col-auto">
-          <button type="button" class="btn btn-danger" onclick="removeExercise(this)">Remove</button>
-        </div>
-      </div>
-    `;
-    exercisesDiv.appendChild(newExercise);
-  }
+  document.addEventListener('turbo:load', () => {
+    // ——— State & IDs ———
+    let currentUsername = null;
+    let savedWorkoutIds = new Set();
 
-  function removeExercise(button) {
-    button.closest('.exercise-entry').remove();
-  }
+    // ——— AUTH CHECK ———
+    function checkAuthStatus() {
+      fetch('/api/authenticated', {
+         credentials: 'same-origin'
+          })
+        .then(res => res.json())
+        .then(data => {
+          if (data.username) {
+            currentUsername = data.username;
+            document.getElementById('profileUsername').textContent = currentUsername;
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('profileSection').style.display = 'block';
+            populateSavedWorkouts();
+            populateCreatedWorkouts(currentUsername);
+          } else {
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('profileSection').style.display = 'none';
+          }
+        })
+        .catch(err => {
+          console.error('Auth check failed:', err);
+          document.getElementById('authSection').style.display = 'block';
+          document.getElementById('profileSection').style.display = 'none';
+        });
+    }
 
-  function addBlock() {
-    const blocksContainer = document.getElementById('blocksContainer');
-    const blockCount = blocksContainer.children.length + 1;
-    
-    const newBlock = document.createElement('div');
-    newBlock.className = 'block card mb-3';
-    newBlock.innerHTML = `
-      <div class="card-body">
-        <h5>Block ${blockCount}</h5>
-        <div class="exercises">
-          <div class="exercise-entry border p-3 mb-2">
-            <div class="row">
-              <div class="col">
-                <input type="text" class="form-control" placeholder="Exercise Name" required>
-              </div>
-              <div class="col">
-                <input type="number" class="form-control" placeholder="Sets" required>
-              </div>
-              <div class="col">
-                <input type="number" class="form-control" placeholder="Reps" required>
-              </div>
-              <div class="col">
-                <input type="number" class="form-control" placeholder="Weight" required>
-              </div>
-              <div class="col-auto">
-                <button type="button" class="btn btn-danger" onclick="removeExercise(this)">Remove</button>
+    // ——— LOGOUT BUTTON ———
+    document.getElementById('logoutButton').addEventListener('click', () => {
+      fetch('/api/sessions', { method: 'DELETE',
+    credentials: 'same-origin' })
+        .then(() => window.location.reload())
+        .catch(err => console.error('Logout failed:', err));
+    });
+
+    // ——— LOGIN HANDLER ———
+    function handleLogin(e) {
+      e.preventDefault();
+      const errorsDiv = document.getElementById('loginErrors');
+      errorsDiv.style.display = 'none';
+      errorsDiv.textContent = '';
+
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+
+      fetch('/api/sessions', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      })
+        .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
+        .then(() => {
+          currentUsername = username;
+          document.getElementById('profileUsername').textContent = username;
+          document.getElementById('authSection').style.display = 'none';
+          document.getElementById('profileSection').style.display = 'block';
+          populateSavedWorkouts();
+          populateCreatedWorkouts(username);
+        })
+        .catch(err => {
+          console.error('Login error:', err);
+          errorsDiv.style.display = 'block';
+          errorsDiv.textContent = err.error || 'Login failed';
+        });
+    }
+
+    // ——— SIGNUP HANDLER ———
+    function handleSignup(e) {
+      e.preventDefault();
+      const username = document.getElementById('signupUsername').value.trim();
+      const email    = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value.trim();
+      const errorsDiv = document.getElementById('signupErrors');
+
+      errorsDiv.style.display = 'none';
+      errorsDiv.textContent = '';
+
+      fetch('/api/users', {
+         credentials: 'same-origin',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: { username, email, password } }),
+      })
+        .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
+        .then(() => {
+          // auto-login
+          return fetch('/api/sessions', {
+            method: 'POST',
+             credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password }),
+          });
+        })
+        .then(res => res.ok
+           ? window.location.reload()
+           : res.json().then(err => Promise.reject(err))
+        )
+        .catch(err => {
+          console.error('Signup error:', err);
+          errorsDiv.style.display = 'block';
+          if (err.errors && Array.isArray(err.errors)) {
+            errorsDiv.innerHTML = err.errors.map(m => `• ${m}`).join('<br>');
+          } else {
+            errorsDiv.textContent = err.error || 'Signup failed';
+          }
+        });
+    }
+
+    // ——— WORKOUT CREATION HANDLER ———
+    function handleNewWorkout(e) {
+      e.preventDefault();
+      if (!currentUsername) {
+        alert('You must be logged in to create a workout.');
+        return;
+      }
+
+      const workoutName = document.getElementById('workoutName').value.trim();
+      const workoutDesc = document.getElementById('workoutDescription').value.trim();
+
+      const blocks = Array.from(document.querySelectorAll('.block')).map(blk => {
+        const blockName = blk.querySelector('.block-name-input').value.trim();
+        const exercises = Array.from(blk.querySelectorAll('.exercise-entry')).map(exDiv => ({
+          name: exDiv.querySelector('.exercise-name').value.trim(),
+          sets: exDiv.querySelector('.exercise-sets').value.trim(),
+          reps: exDiv.querySelector('.exercise-reps').value.trim(),
+          weight: exDiv.querySelector('.exercise-weight').value.trim()
+        }));
+        return { name: blockName, exercises };
+      });
+
+      fetch('/api/workouts', {
+        method: 'POST',
+         credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: currentUsername,
+          workout_name: workoutName,
+          description: workoutDesc,
+          blocks
+        })
+      })
+        .then(res => res.status === 201 ? res.json() : res.json().then(err => Promise.reject(err)))
+        .then(() => {
+          toggleWorkoutForm();
+          populateSavedWorkouts();
+          populateCreatedWorkouts(currentUsername);
+          document.getElementById('newWorkoutForm').reset();
+          document.getElementById('blocksContainer').innerHTML = `
+              <div class="block card mb-3">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5>Block 1</h5>
+                    <button
+                      type="button"
+                      class="btn btn-danger btn-sm"
+                      onclick="removeBlock(this)">
+                      Remove Block
+                    </button>
+                  </div>
+                  <div class="mb-2">
+                    <label>Block Name</label>
+                    <input
+                      type="text"
+                      class="form-control block-name-input"
+                      placeholder="e.g. Quads & Glutes"
+                      required>
+                  </div>
+                  <div class="exercises">
+                    <div class="exercise-entry border p-3 mb-2">
+                      <div class="row g-2">
+                        <div class="col">
+                          <input
+                            type="text"
+                            class="form-control exercise-name"
+                            placeholder="Exercise Name"
+                            required>
+                        </div>
+                        <div class="col">
+                          <input
+                            type="number"
+                            class="form-control exercise-sets"
+                            placeholder="Sets"
+                            required>
+                        </div>
+                        <div class="col">
+                          <input
+                            type="number"
+                            class="form-control exercise-reps"
+                            placeholder="Reps"
+                            required>
+                        </div>
+                        <div class="col">
+                          <input
+                            type="number"
+                            class="form-control exercise-weight"
+                            placeholder="Weight"
+                            required>
+                        </div>
+                        <div class="col-auto">
+                          <button
+                            type="button"
+                            class="btn btn-danger"
+                            onclick="removeExercise(this)">
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-secondary btn-sm mt-2"
+                    onclick="addExercise(this)">
+                    Add Exercise
+                  </button>
+                </div>
+              </div>`;
+          })
+         .catch(err => {
+          console.error('Workout creation failed:', err);
+          alert('Failed to create workout: ' +
+            (err.errors ? err.errors.join(', ') : 'Unknown error'));
+        });
+    }
+
+    // ——— BIND EACH FORM EXACTLY ONCE ———
+    bindOnce(document.getElementById('loginForm'),      'submit', handleLogin);
+    bindOnce(document.getElementById('signupForm'),     'submit', handleSignup);
+    bindOnce(document.getElementById('newWorkoutForm'), 'submit', handleNewWorkout);
+
+    // ——————— POPULATE CREATED WORKOUTS ———————
+    function populateCreatedWorkouts(username) {
+      fetch(`/api/workouts?username=${encodeURIComponent(username)}`, {
+           credentials: 'same-origin'
+            })
+        .then((res) => {
+          if (!res.ok) {
+            return Promise.reject(`HTTP ${res.status}`);
+          }
+          return res.json();
+        })
+        .then((workouts) => {
+          const container = document.getElementById(
+            'createdWorkoutsGrid'
+          );
+          container.innerHTML = '';
+
+          if (workouts.length === 0) {
+            document.getElementById('noCreatedPlaceholder').style.display =
+              'block';
+            return;
+          }
+          document.getElementById('noCreatedPlaceholder').style.display =
+            'none';
+
+          workouts.forEach((workout) => {
+            const isSaved = savedWorkoutIds.has(workout.id);
+            const buttonText = isSaved ? 'Unsave' : 'Save';
+
+            const joinId = workout.join_id || '';
+
+            const colDiv = document.createElement('div');
+            colDiv.className = 'col-md-4';
+            colDiv.innerHTML = `
+              <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">${workout.workout_name}</h5>
+                  <p class="card-text">${
+                    workout.description || ''
+                  }</p>
+                  ${(() => {
+                    const blocks =
+                      typeof workout.blocks === 'string'
+                        ? JSON.parse(workout.blocks)
+                        : workout.blocks || [];
+                    const totalBlocks = blocks.length;
+                    const totalExercises = blocks.reduce(
+                      (sum, blk) =>
+                        sum +
+                        (Array.isArray(blk.exercises)
+                          ? blk.exercises.length
+                          : 0),
+                      0
+                    );
+                    return `<small class="text-muted mb-3">
+                      ${totalBlocks} block${
+                      totalBlocks !== 1 ? 's' : ''
+                    } · ${totalExercises} exercise${
+                      totalExercises !== 1 ? 's' : ''
+                    }
+                    </small>`;
+                  })()}
+                  <div class="mt-auto d-flex justify-content-between">
+                    <button
+                      class="btn btn-outline-primary btn-sm me-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#workoutModal"
+                      data-workout='${JSON.stringify(workout)}'
+                      onclick="showWorkoutDetails(this.getAttribute('data-workout'))">
+                      View
+                    </button>
+                    <button
+                      class="btn btn-sm save-toggle-btn"
+                      data-workout-id="${workout.id}"
+                      data-join-id="${joinId}"
+                      >${buttonText}</button>
+                  </div>
+                </div>
+              </div>`;
+            container.appendChild(colDiv);
+          });
+
+          // After rendering all cards, attach click handlers to every “Save/Unsave” button:
+          document.querySelectorAll('.save-toggle-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const workoutId = btn.dataset.workoutId;
+              const joinId = btn.dataset.joinId; // might be empty if not yet saved
+
+              if (savedWorkoutIds.has(Number(workoutId))) {
+                fetch(`/api/saved_workouts/${joinId}`, {
+                  method: 'DELETE',
+                   credentials: 'same-origin'
+                })
+                  .then((res) => {
+                    if (!res.ok) {
+                      return res.json().then((err) =>
+                        Promise.reject(err)
+                      );
+                    }
+                  
+                    populateSavedWorkouts();
+                    populateCreatedWorkouts(currentUsername);
+                  })
+                  .catch((err) => {
+                    console.error('Unsave failed:', err);
+                  });
+              } else {
+              
+                fetch('/api/saved_workouts', {
+                  method: 'POST',
+                  credentials: 'same-origin',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ workout_id: workoutId }),
+                })
+                  .then((res) => {
+                    if (!res.ok) {
+                      return res.json().then((errData) =>
+                        Promise.reject(errData)
+                      );
+                    }
+                    return res.json();
+                  })
+                  .then((data) => {
+              
+                    populateSavedWorkouts();
+                    populateCreatedWorkouts(currentUsername);
+                  })
+                  .catch((err) => {
+                    console.error('Save failed:', err);
+                  });
+              }
+            });
+          });
+        })
+        .catch((err) => {
+          console.error('Populate workouts failed:', err);
+          document.getElementById('noCreatedPlaceholder').style.display =
+            'block';
+          document.getElementById(
+            'noCreatedPlaceholder'
+          ).textContent = 'Could not load your workouts.';
+        });
+    }
+
+    // ——————— POPULATE SAVED WORKOUTS ———————
+    function populateSavedWorkouts() {
+      fetch('/api/saved_workouts', {
+           credentials: 'same-origin'
+          })      
+        .then((res) => {
+          if (!res.ok) {
+            return Promise.reject(`HTTP ${res.status}`);
+          }
+          return res.json();
+        })
+        .then((workouts) => {
+          // Clear out the old IDs and re-populate
+          savedWorkoutIds = new Set(workouts.map((w) => w.id));
+          const grid = document.getElementById('savedWorkoutsGrid');
+          grid.innerHTML = '';
+
+          if (workouts.length === 0) {
+            grid.innerHTML = `
+              <div class="col-12 text-center">
+                <p class="text-muted">No saved workouts yet.</p>
+              </div>`;
+            return;
+          }
+
+          workouts.forEach((workout) => {
+          
+            const colDiv = document.createElement('div');
+            colDiv.className = 'col-md-4';
+            colDiv.innerHTML = `
+              <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">${workout.workout_name}</h5>
+                  <p class="card-text">${
+                    workout.description || ''
+                  }</p>
+
+                  ${(() => {
+                    const blocks =
+                      typeof workout.blocks === 'string'
+                        ? JSON.parse(workout.blocks)
+                        : workout.blocks || [];
+                    const totalBlocks = blocks.length;
+                    const totalExercises = blocks.reduce(
+                      (sum, blk) =>
+                        sum +
+                        (Array.isArray(blk.exercises)
+                          ? blk.exercises.length
+                          : 0),
+                      0
+                    );
+                    return `<small class="text-muted mb-3">
+                      ${totalBlocks} block${
+                      totalBlocks !== 1 ? 's' : ''
+                    } · ${totalExercises} exercise${
+                      totalExercises !== 1 ? 's' : ''
+                    }
+                    </small>`;
+                  })()}
+
+                  <div class="mt-auto d-flex justify-content-between">
+                    <button
+                      class="btn btn-outline-primary btn-sm me-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#workoutModal"
+                      data-workout='${JSON.stringify(workout)}'
+                      onclick="showWorkoutDetails(this.getAttribute('data-workout'))">
+                      View
+                    </button>
+                    <button
+                      class="btn btn-sm unsave-btn"
+                      data-join-id="${workout.join_id}">
+                      Unsave
+                    </button>
+                  </div>
+                </div>
+              </div>`;
+            grid.appendChild(colDiv);
+          });
+
+          // Attach click handlers for “Unsave”:
+          document
+            .querySelectorAll('.unsave-btn')
+            .forEach((btn) => {
+              btn.addEventListener('click', () => {
+                const joinId = btn.dataset.joinId;
+                fetch(`/api/saved_workouts/${joinId}`, {
+                  method: 'DELETE',
+                  credentials: 'same-origin'
+                })
+                  .then((res) => {
+                    if (!res.ok) {
+                      return res.json().then((e) => Promise.reject(e));
+                    }
+                    // Re-fetch both lists:
+                    populateSavedWorkouts();
+                    populateCreatedWorkouts(currentUsername);
+                  })
+                  .catch((err) => {
+                    console.error('Unsave failed:', err);
+                  });
+              });
+            });
+        })
+        .catch((err) => {
+          console.error('Failed to load saved workouts:', err);
+          const grid = document.getElementById('savedWorkoutsGrid');
+          grid.innerHTML = `
+            <div class="col-12 text-center">
+              <p class="text-danger">Could not load saved workouts.</p>
+            </div>`;
+        });
+    }
+
+    // ——————— HELPER FUNCTIONS (UNCHANGED) ———————
+    window.toggleWorkoutForm = function () {
+      const form = document.getElementById('workoutForm');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    };
+
+    window.addExercise = function (button) {
+      const exercisesDiv = button.parentElement.querySelector('.exercises');
+      const newExc = document.createElement('div');
+      newExc.className = 'exercise-entry border p-3 mb-2';
+      newExc.innerHTML = `
+        <div class="row g-2">
+          <div class="col">
+            <input
+              type="text"
+              class="form-control exercise-name"
+              placeholder="Exercise Name"
+              required>
+          </div>
+          <div class="col">
+            <input
+              type="number"
+              class="form-control exercise-sets"
+              placeholder="Sets"
+              required>
+          </div>
+          <div class="col">
+            <input
+              type="number"
+              class="form-control exercise-reps"
+              placeholder="Reps"
+              required>
+          </div>
+          <div class="col">
+            <input
+              type="number"
+              class="form-control exercise-weight"
+              placeholder="Weight"
+              required>
+          </div>
+          <div class="col-auto">
+            <button
+              type="button"
+              class="btn btn-danger"
+              onclick="removeExercise(this)">
+              Remove
+            </button>
+          </div>
+        </div>`;
+      exercisesDiv.appendChild(newExc);
+    };
+
+    window.removeExercise = function (button) {
+      button.closest('.exercise-entry').remove();
+    };
+
+    window.addBlock = function () {
+      const blocksContainer = document.getElementById('blocksContainer');
+      const blockCount = blocksContainer.children.length + 1;
+
+      const newBlock = document.createElement('div');
+      newBlock.className = 'block card mb-3';
+      newBlock.innerHTML = `
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5>Block ${blockCount}</h5>
+            <button
+              type="button"
+              class="btn btn-danger btn-sm"
+              onclick="removeBlock(this)">
+              Remove Block
+            </button>
+          </div>
+          <div class="mb-2">
+            <label>Block Name</label>
+            <input
+              type="text"
+              class="form-control block-name-input"
+              placeholder="e.g. Chest & Shoulders"
+              required>
+          </div>
+          <div class="exercises">
+            <div class="exercise-entry border p-3 mb-2">
+              <div class="row g-2">
+                <div class="col">
+                  <input
+                    type="text"
+                    class="form-control exercise-name"
+                    placeholder="Exercise Name"
+                    required>
+                </div>
+                <div class="col">
+                  <input
+                    type="number"
+                    class="form-control exercise-sets"
+                    placeholder="Sets"
+                    required>
+                </div>
+                <div class="col">
+                  <input
+                    type="number"
+                    class="form-control exercise-reps"
+                    placeholder="Reps"
+                    required>
+                </div>
+                <div class="col">
+                  <input
+                    type="number"
+                    class="form-control exercise-weight"
+                    placeholder="Weight"
+                    required>
+                </div>
+                <div class="col-auto">
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="removeExercise(this)">
+                    Remove
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <button type="button" class="btn btn-secondary mt-2" onclick="addExercise(this)">Add Exercise</button>
-      </div>
-    `;
-    blocksContainer.appendChild(newBlock);
-  }
-
-  function showWorkoutDetails(workoutName) {
-    const workoutData = {
-      'Upper Body Strength': {
-        blocks: [
-          {
-            name: 'Chest & Shoulders',
-            exercises: [
-              { name: 'Bench Press', sets: 4, reps: 10, weight: '135 lbs' },
-              { name: 'Shoulder Press', sets: 3, reps: 12, weight: '95 lbs' }
-            ]
-          },
-          {
-            name: 'Back & Arms',
-            exercises: [
-              { name: 'Pull-ups', sets: 3, reps: 8, weight: 'Body weight' },
-              { name: 'Bicep Curls', sets: 3, reps: 12, weight: '30 lbs' }
-            ]
-          }
-        ]
-      },
-      'Lower Body Power': {
-        blocks: [
-          {
-            name: 'Quads & Glutes',
-            exercises: [
-              { name: 'Squats', sets: 4, reps: 8, weight: '185 lbs' },
-              { name: 'Lunges', sets: 3, reps: 12, weight: '95 lbs' }
-            ]
-          }
-        ]
-      }
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm mt-2"
+            onclick="addExercise(this)">
+            Add Exercise
+          </button>
+        </div>`;
+      blocksContainer.appendChild(newBlock);
     };
 
-    const workout = workoutData[workoutName];
-    const modalTitle = document.getElementById('workoutModalLabel');
-    const modalBody = document.getElementById('workoutDetails');
-    
-    modalTitle.textContent = workoutName;
-    
-    let html = '<div class="workout-blocks">';
-    workout.blocks.forEach((block, blockIndex) => {
-      html += `
-        <div class="block mb-4">
-          <h4 class="mb-3">Block ${blockIndex + 1}: ${block.name}</h4>
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Exercise</th>
-                  <th>Sets</th>
-                  <th>Reps</th>
-                  <th>Weight</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${block.exercises.map(exercise => `
+    window.removeBlock = function (button) {
+      button.closest('.block').remove();
+      document.querySelectorAll('.block').forEach((blk, idx) => {
+        blk.querySelector('h5').innerText = `Block ${idx + 1}`;
+      });
+    };
+
+    window.showWorkoutDetails = function (serializedWorkout) {
+      const workout = JSON.parse(serializedWorkout);
+      const modalTitle = document.getElementById('workoutModalLabel');
+      const modalBody = document.getElementById('workoutDetails');
+
+      modalTitle.textContent = workout.workout_name;
+      const blocks =
+        typeof workout.blocks === 'string'
+          ? JSON.parse(workout.blocks)
+          : workout.blocks || [];
+
+      let html = '<div class="workout-blocks">';
+      blocks.forEach((blk, i) => {
+        html += `
+          <div class="block mb-4">
+            <h4 class="mb-3">Block ${i + 1}: ${blk.name}</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
                   <tr>
-                    <td>${exercise.name}</td>
-                    <td>${exercise.sets}</td>
-                    <td>${exercise.reps}</td>
-                    <td>${exercise.weight}</td>
+                    <th>Exercise</th>
+                    <th>Sets</th>
+                    <th>Reps</th>
+                    <th>Weight</th>
                   </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-    });
-    html += '</div>';
-    
-    modalBody.innerHTML = html;
-  }
+                </thead>
+                <tbody>
+                  ${blk.exercises
+                    .map(
+                      (ex) => `
+                    <tr>
+                      <td>${ex.name}</td>
+                      <td>${ex.sets}</td>
+                      <td>${ex.reps}</td>
+                      <td>${ex.weight}</td>
+                    </tr>`
+                    )
+                    .join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>`;
+      });
+      html += '</div>';
+      modalBody.innerHTML = html;
+    };
+    checkAuthStatus();
+    window.addEventListener('popstate', checkAuthStatus);
+  });
+  
 </script>

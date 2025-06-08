@@ -1,14 +1,22 @@
 class Workout < ApplicationRecord
-  # If you want to enforce that the username exists in users, you could add a custom validation:
-  # validate :username_must_exist
+  # If you used a JSON column type, Rails will automatically cast to/from Hash/Array.
+  # If you used a text column instead, you need to serialize it manually:
+  #serialize :blocks, JSON
 
-  # def username_must_exist
-  #   unless User.exists?(username: username)
-  #     errors.add(:username, "must refer to a valid user")
-  #   end
-  # end
-
-  validates :username, presence: true
   validates :workout_name, presence: true
-  # add more validations as required
+  validates :username,     presence: true
+  has_many :saved_workouts, dependent: :destroy
+  has_many :users_who_saved,
+           through: :saved_workouts,
+           source: :user
+  # … any other validations …
+
+  # (Optional) A helper method to count blocks/exercises:
+  def total_blocks
+    (blocks || []).size
+  end
+
+  def total_exercises
+    (blocks || []).sum { |blk| (blk["exercises"] || []).size }
+  end
 end

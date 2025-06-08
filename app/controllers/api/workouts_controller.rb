@@ -1,22 +1,28 @@
 module Api
   class WorkoutsController < ApplicationController
     skip_before_action :verify_authenticity_token
-
-    # If you want to ensure a user is logged in before certain actions:
     before_action :require_login, only: [:create, :update, :destroy]
 
-    # GET /api/workouts
-    def index
-      # Return all workouts, or filter by username:
-      if params[:username]
-        @workouts = Workout.where(username: params[:username])
+    def user_workouts
+      user = User.find_by(username: params[:username])
+      if user
+        @workouts = Workout.where(username: user.username)
+        render 'api/workouts/index'
       else
-        @workouts = Workout.all
+        render json: { error: 'User not found' }, status: :not_found
       end
+    end
+
+    def index
+      @workouts =
+        if params[:username]
+          Workout.where(username: params[:username])
+        else
+          Workout.all
+        end
       render json: @workouts
     end
 
-    # GET /api/workouts/:id
     def show
       @workout = Workout.find_by(id: params[:id])
       if @workout
@@ -26,10 +32,8 @@ module Api
       end
     end
 
-    # POST /api/workouts
     def create
-      # If you want to tie to the logged-in user:
-      # current_user.username (assuming you have a current_user helper)
+      # Merge in the current_user’s username
       workout_data = workout_params.merge(username: current_user.username)
       @workout = Workout.new(workout_data)
 
@@ -40,12 +44,10 @@ module Api
       end
     end
 
-    # PATCH/PUT /api/workouts/:id
     def update
       @workout = Workout.find_by(id: params[:id])
       return render json: { error: "Workout not found" }, status: :not_found unless @workout
 
-      # Optional: ensure only owner can update
       if @workout.username != current_user.username
         return render json: { error: "Forbidden" }, status: :forbidden
       end
@@ -57,12 +59,10 @@ module Api
       end
     end
 
-    # DELETE /api/workouts/:id
     def destroy
       @workout = Workout.find_by(id: params[:id])
       return render json: { error: "Workout not found" }, status: :not_found unless @workout
 
-      # Optional: ensure only owner can delete
       if @workout.username != current_user.username
         return render json: { error: "Forbidden" }, status: :forbidden
       end
@@ -74,19 +74,18 @@ module Api
     private
 
     def workout_params
+      # Permit nested blocks + exercises structure:
       params.require(:workout).permit(
         :workout_name,
         :description,
-        :block_name,
-        :exercise,
-        :sets,
-        :reps,
-        :weight,
-        :percent_of_max
+        :percent_of_max,
+        blocks: [
+          :name,
+          { exercises: [:name, :sets, :reps, :weight] }
+        ]
       )
     end
 
-    # Simple helper to fetch the logged-in user (using session)
     def current_user
       @current_user ||= User.find_by(id: session[:user_id])
     end
