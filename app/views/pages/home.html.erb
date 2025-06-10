@@ -79,14 +79,42 @@
   document.addEventListener('turbo:load', () => {
     const modalEl = document.getElementById('workoutModal');
     if (!modalEl) return;
+    
+const workoutModal = new bootstrap.Modal(modalEl, {
+    backdrop: 'static',
+    keyboard: true
+  });
 
-    // CSRF token for Rails
+  // Handle modal closing
+  modalEl.addEventListener('hidden.bs.modal', () => {
+    document.body.classList.remove('modal-open');
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+      backdrop.remove();
+    }
+  });
+
+  // Add close handler for the close button
+  const closeBtn = modalEl.querySelector('.btn-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      workoutModal.hide();
+    });
+  }
+
+  // Add close handler for the secondary close button
+  const secondaryCloseBtn = modalEl.querySelector('.btn-secondary');
+  if (secondaryCloseBtn) {
+    secondaryCloseBtn.addEventListener('click', () => {
+      workoutModal.hide();
+    });
+  }
+   
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    // track login
     let isLoggedIn = false;
 
-    // fetch once to set login state
+
     fetch('/api/authenticated', {
       credentials: 'same-origin',
       headers: { 'Accept': 'application/json' }
