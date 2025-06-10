@@ -14,6 +14,9 @@
           <div class="card h-100 shadow-sm">
             <div class="card-body d-flex flex-column">
               <h5 class="card-title"><%= workout.workout_name %></h5>
+              <small class="text-muted mb-2">
+                Created by <%= workout.username %>
+              </small>
               <p class="card-text"><%= truncate(workout.description, length: 100) %></p>
 
               <% if workout.blocks.present? %>

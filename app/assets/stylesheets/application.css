@@ -49,8 +49,16 @@ body {
 .card-title {
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.25rem;  /* Reduce space between title and username */
   color: #2c3e50;
+}
+
+.card-text {
+  margin-top: 0.75rem;  /* Add space between username and description */
+}
+
+.card .text-muted {
+  font-size: 0.875rem;
 }
 
 /* Container Spacing */
