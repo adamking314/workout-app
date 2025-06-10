@@ -6,22 +6,10 @@ application up and running.
 Things you may want to cover:
 
 * Ruby version
+ruby version: 3.3.6  
 
 * System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+bundle install 
 
 
 Explanations of the technologies used
@@ -38,11 +26,18 @@ I made this app becasue I wanted something that me and my friends could use to s
 So I first wanted to be able to create a workout and have it display on the page for everyeon to see. I then want to make sure that any workout I made is easily found on my page. Then I wanted to create an easy way for me to save the workouts I liked in one place instead of having to search through all of them. 
 
 Installation instructions for any dependencies
+ - bundle install 
+ - yarn 
 
 User stories – who your users are, what they want and why
     My users are people who workout and want to store and share workouts (my firends). We want a place where can keep all of our workouts so its easy to find and easy for eachother to share them. 
 
 Link to your wireframes – sketches of major views / interfaces in your application
+https://drive.google.com/drive/folders/14l21PZ-TOXPz14YHWQTvmdkQhMqLnLkp?dmr=1&ec=wgc-drive-globalnav-goto 
+
+
 Link to your video demo
+
+
 Descriptions of any unsolved problems or major hurdles you had to overcome
     the main hurdle was being able to get the workouts to save to the user page. 

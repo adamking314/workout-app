@@ -76,9 +76,15 @@
 </div>
 
 <script>
+  // Keep track of initialized elements
+  const initialized = new Set();
+
   document.addEventListener('turbo:load', () => {
     const modalEl = document.getElementById('workoutModal');
-    if (!modalEl) return;
+    if (!modalEl || initialized.has(modalEl)) return;
+    
+    // Mark as initialized
+    initialized.add(modalEl);
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     let isLoggedIn = false;
@@ -202,16 +208,20 @@
       });
     });
 
-    // Handle save workout
+    // Handle save workout - use once: true to ensure single binding
     document.getElementById('saveWorkoutBtn')?.addEventListener('click', function() {
       if (!isLoggedIn) {
         alert('You must be logged in to save a workout.');
         return;
       }
 
+      // Disable button to prevent multiple clicks
+      this.disabled = true;
+
       const workoutId = this.dataset.workoutId;
       if (!workoutId) {
         alert('Could not determine which workout to save.');
+        this.disabled = false;
         return;
       }
 
@@ -233,7 +243,16 @@
         .catch(err => {
           console.error('Save error:', err);
           alert(err.error || 'Could not save workout.');
+        })
+        .finally(() => {
+          // Re-enable button after request completes
+          this.disabled = false;
         });
+    }, { once: true }); // Add once: true option
+
+    // Clean up handler
+    modalEl.addEventListener('turbo:before-cache', () => {
+      initialized.delete(modalEl);
     });
   });
 </script>
