@@ -79,124 +79,161 @@
   document.addEventListener('turbo:load', () => {
     const modalEl = document.getElementById('workoutModal');
     if (!modalEl) return;
-   
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     let isLoggedIn = false;
+    let workoutModal;
 
-    // fetch once to set login state
+    // Initialize Bootstrap modal
+    try {
+      workoutModal = new bootstrap.Modal(modalEl, {
+        keyboard: true,
+        backdrop: true
+      });
+
+      // Clean up modal on hide
+      modalEl.addEventListener('hidden.bs.modal', () => {
+        document.body.classList.remove('modal-open');
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
+      });
+    } catch (error) {
+      console.error('Failed to initialize modal:', error);
+      return;
+    }
+
+    // Check authentication status
     fetch('/api/authenticated', {
       credentials: 'same-origin',
       headers: { 'Accept': 'application/json' }
     })
       .then(r => r.json())
       .then(data => {
-        if (data.username) isLoggedIn = true;
+        isLoggedIn = !!data.username;
+        console.log('Auth status:', isLoggedIn ? 'Logged in' : 'Not logged in');
       })
       .catch(console.error);
 
-    // init bootstrap modal
-    const workoutModal = new bootstrap.Modal(modalEl);
-
-    // show details in modal
+    // Show workout details
     function showWorkoutDetails(raw) {
-      let workout;
-      raw = raw.replace(/\+/g, ' ');
-      try {
-        workout = JSON.parse(decodeURIComponent(raw));
-      } catch (err) {
-        console.error('Failed to parse workout JSON', err);
+      if (!raw) {
+        console.error('No workout data provided');
         return;
       }
 
-      // title
-      document.getElementById('workoutModalLabel').textContent =
+      let workout;
+      try {
+        // Handle URI encoded data
+        raw = decodeURIComponent(raw.replace(/\+/g, ' '));
+        workout = JSON.parse(raw);
+        console.log('Parsed workout:', workout);
+      } catch (err) {
+        console.error('Failed to parse workout JSON:', err);
+        return;
+      }
+
+      // Update modal title
+      document.getElementById('workoutModalLabel').textContent = 
         workout.workout_name || 'Workout Details';
 
-      // set data‐id on save button
+      // Update save button
       const saveBtn = document.getElementById('saveWorkoutBtn');
-      saveBtn.dataset.workoutId = workout.id;
+      if (saveBtn) {
+        saveBtn.dataset.workoutId = workout.id;
+      }
 
-      // render blocks/exercises
+      // Parse and render blocks
       let blocks = [];
-      if (workout.blocks) {
-        blocks = Array.isArray(workout.blocks)
-          ? workout.blocks
-          : JSON.parse(workout.blocks);
+      try {
+        if (workout.blocks) {
+          blocks = Array.isArray(workout.blocks) 
+            ? workout.blocks 
+            : JSON.parse(workout.blocks);
+        }
+      } catch (err) {
+        console.error('Failed to parse blocks:', err);
+        blocks = [];
       }
 
-      let html = '<div class="workout-blocks">';
-      if (blocks.length === 0) {
-        html += '<p class="text-muted">No exercises in this workout.</p>';
-      } else {
-        blocks.forEach((blk, idx) => {
-          html += `
-            <div class="block mb-4">
-              <h4 class="mb-3">Block ${idx+1}: ${blk.name||'Untitled'}</h4>
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Exercise</th><th>Sets</th><th>Reps</th><th>Weight</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${(blk.exercises||[]).map(ex=>`
-                      <tr>
-                        <td>${ex.name||'-'}</td>
-                        <td>${ex.sets||'-'}</td>
-                        <td>${ex.reps||'-'}</td>
-                        <td>${ex.weight||'-'}</td>
-                      </tr>`).join('')}
-                  </tbody>
-                </table>
-              </div>
-            </div>`;
-        });
-      }
-      html += '</div>';
+      // Generate HTML
+      const html = `
+        <div class="workout-blocks">
+          ${blocks.length === 0 
+            ? '<p class="text-muted">No exercises in this workout.</p>'
+            : blocks.map((blk, idx) => `
+                <div class="block mb-4">
+                  <h4 class="mb-3">Block ${idx + 1}: ${blk.name || 'Untitled'}</h4>
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Exercise</th>
+                          <th>Sets</th>
+                          <th>Reps</th>
+                          <th>Weight</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${(blk.exercises || []).map(ex => `
+                          <tr>
+                            <td>${ex.name || '-'}</td>
+                            <td>${ex.sets || '-'}</td>
+                            <td>${ex.reps || '-'}</td>
+                            <td>${ex.weight || '-'}</td>
+                          </tr>
+                        `).join('')}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              `).join('')
+          }
+        </div>
+      `;
+
       document.getElementById('workoutDetails').innerHTML = html;
-
       workoutModal.show();
     }
 
+    // Attach view workout handlers
     document.querySelectorAll('.view-workout-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         showWorkoutDetails(btn.dataset.workout);
       });
     });
 
-
-   document.getElementById('saveWorkoutBtn')
-  .addEventListener('click', function (event) {
+    // Handle save workout
+    document.getElementById('saveWorkoutBtn')?.addEventListener('click', function() {
       if (!isLoggedIn) {
-        return alert('You must be logged in to save a workout.');
+        alert('You must be logged in to save a workout.');
+        return;
       }
 
       const workoutId = this.dataset.workoutId;
-    if (!workoutId) {
-      return alert('Could not determine which workout to save.');
-    }
+      if (!workoutId) {
+        alert('Could not determine which workout to save.');
+        return;
+      }
 
       fetch('/api/saved_workouts', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept':       'application/json',
-        'X-CSRF-Token': csrfToken
-      },
-      body: JSON.stringify({ workout_id: workoutId })
-    })
-      .then(r => r.ok ? r.json() : r.json().then(e => Promise.reject(e)))
-      .then(() => {
-        workoutModal.hide();
-       
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-Token': csrfToken
+        },
+        body: JSON.stringify({ workout_id: workoutId })
       })
-      .catch(err => {
-        console.error('Save error:', err);
-        alert(err.error || 'Could not save workout.');
-      });
-  });
+        .then(r => r.ok ? r.json() : r.json().then(e => Promise.reject(e)))
+        .then(data => {
+          alert('Workout saved successfully!');
+          workoutModal.hide();
+        })
+        .catch(err => {
+          console.error('Save error:', err);
+          alert(err.error || 'Could not save workout.');
+        });
+    });
   });
 </script>
