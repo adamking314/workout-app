@@ -53,7 +53,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 end
 group :development, :test do
-  gem "sqlite3", "~> 2.1"
+  gem "sqlite3", "~> 2.7"
 end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
